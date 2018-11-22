@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand');
+body {
+  font-family: 'Quicksand', sans-serif;
+}
+
+.center {
+  text-align: center;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+span {
+  font-size: 25px;
+}
+
+header {
+  text-transform: uppercase;
+  text-align: center;
+  background: #41abc3;
+  color: #fff;
+  padding: 15px;
+  border-bottom: 10px solid #1186a7;
+  margin-bottom: 90px;
+}
+
+.input-tx {
+  width: 80%;
+  padding: 5px;
+  text-align: center;
+  border: 2px solid #1186a7;
+  border-radius: 40px;
+  outline: none;
+}
+
+.btn-padrao {
+  width: 250px;
+  background: #1186a7;
+  border: 2px solid #1186a7;
+  font-size: 18px;
+  text-transform: uppercase;
+  color: #ffff;
+  font-weight: 700;
+  border-radius: 27px;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  outline: none;
+  transition: 0.7s;
+  cursor: pointer;
+}
+
+.btn-padrao:hover {
+  background: transparent;
+  color: #1186a7;
+}
+  .btn-padrao:active, .btn-padrao:focus {
+    outline: 0;
+    -moz-outline-style: none;
+  }
+footer {
+  border-top: 8px solid#41abc3;
+  background: #1186a7;
+  padding: 25px;
+  color: #fff;
+  padding-bottom: 10px;
+}
+
+/*Responsivo*/
+
+@media (max-width: 500px) {
+  .input-tx {
+    width: 90%;
+  }
+}

@@ -1,5 +1,9 @@
+using System;
+using System.Linq;
+using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -20,6 +24,7 @@ namespace ASP.NET_Hash_Generator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
@@ -30,7 +35,7 @@ namespace ASP.NET_Hash_Generator
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IAntiforgery antiforgery)
         {
             if (env.IsDevelopment())
             {
@@ -41,11 +46,33 @@ namespace ASP.NET_Hash_Generator
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+            var angularRoutes = new[] {
+                "/default",
+                "/about",
+                "/home"
+            };
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+            app.Use(async (context, next) =>
+            {
+                string path = context.Request.Path.Value;
+                if (path != null && !path.ToLower().Contains("/api"))
+                {
+                    // XSRF-TOKEN used by angular in the $http if provided
+                    var tokens = antiforgery.GetAndStoreTokens(context);
+                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken, new CookieOptions { HttpOnly = false, Secure = true });
+                }
 
+                if (context.Request.Path.HasValue && null != angularRoutes.FirstOrDefault(
+                        (ar) => context.Request.Path.Value.StartsWith(ar, StringComparison.OrdinalIgnoreCase)))
+                {
+                    context.Request.Path = new PathString("/");
+                }
+
+                await next();
+            });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

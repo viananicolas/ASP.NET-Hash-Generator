@@ -16,7 +16,7 @@ namespace ASP.NET_Hash_Generator.Controllers
         public IActionResult Post([FromBody] InputPasswordViewModel inputPasswordViewModel)
         {
             var passwordHasher = new PasswordHasher<string>();
-            return Ok(passwordHasher.HashPassword("", inputPasswordViewModel.Password));
+            return Ok(new { hashedPassword  = passwordHasher.HashPassword("", inputPasswordViewModel.Password) });
         }
     }
 }
