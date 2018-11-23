@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using ASP.NET_Hash_Generator.Enums;
 using ASP.NET_Hash_Generator.Methods;
 using ASP.NET_Hash_Generator.ViewModel;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +10,6 @@ namespace ASP.NET_Hash_Generator.Controllers
     [Produces("application/json"), Route("api/home"), ApiController]
     public class HomeController : ControllerBase
     {
-        private IHostingEnvironment HostingEnv { get; set; }
-
-        public HomeController(IHostingEnvironment hostingEnv)
-        {
-            HostingEnv = hostingEnv;
-        }
         [HttpPost]
         public IActionResult Post([FromBody] InputPasswordViewModel inputPasswordViewModel)
         {
