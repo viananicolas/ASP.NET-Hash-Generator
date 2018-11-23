@@ -8,21 +8,29 @@
 <div class="container center">
   <form #form="ngForm" (ngSubmit)="getHashedPassword(form)" [action]="actionUrl" method="POST" ngNativeValidate class="row">
     <div class="col-sm-12">
-      <span>Informe o tipo de Hash</span><br /><br />
-      <select name="hashType" [(ngModel)]="passwordModel.hashType" required="required" class="input-tx">
-        <option *ngFor="let hashType of hashTypes" [value]="hashType.value">{{hashType.type}}</option>
-      </select><br /><br />
-      <span>Digite sua senha</span><br/><br/>
-      <input name="password" class="input-tx" type="text" [(ngModel)]="passwordModel.password" required="required"/>
+      <div>
+        <span>Informe o tipo de Hash</span>
+        <select name="hashType" [(ngModel)]="passwordModel.hashType" required="required" class="input-tx">
+          <option *ngFor="let hashType of hashTypes" [value]="hashType.value">{{hashType.type}}</option>
+        </select>
+      </div>
+      <div>
+        <div><span>Digite sua senha</span></div>
+        <input name="password" class="input-tx" type="text" [(ngModel)]="passwordModel.password" required="required" />
+      </div>
     </div>
     <div class="col-sm-12"><button class="btn-padrao">Gerar</button></div>
     <div class="col-sm-12">
-      <input name="hashedPassword" class="input-tx" readonly type="text"
-      [(ngModel)]="hashedPasswordModel.hashedPassword" /><br />
+      <div>
+        <input name="hashedPassword" class="input-tx" readonly type="text"
+               [(ngModel)]="hashedPasswordModel.hashedPassword" />
+      </div>
       <button ngxClipboard
-      [cbContent]="hashedPasswordModel.hashedPassword"
-      type="button"
-      class="btn-padrao" (cbOnSuccess)= "copied($event)">{{copyText}}</button><br>
+              [cbContent]="hashedPasswordModel.hashedPassword"
+              type="button"
+              class="btn-padrao" (cbOnSuccess)="copied($event)">
+        {{copyText}}
+      </button><br>
       <small *ngIf="hashedPasswordModel.hashedPassword">Hash Gerada com Sucesso!</small>
     </div>
   </form>
