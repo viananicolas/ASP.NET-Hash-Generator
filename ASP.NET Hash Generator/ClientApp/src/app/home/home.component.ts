@@ -14,20 +14,25 @@ export class HomeComponent {
   @ViewChild("form") form: Form;
   actionUrl = "";
   passwordModel = {
+    hashType: null,
     password: ""
   };
   hashedPasswordModel = {
     hashedPassword: ""
   };
+  hashTypes = [
+    { value: 0, type: "ASP.NET MVC" },
+    { value: 1, type: "ASP.NET CORE" }
+  ];
   copyText = "Copiar";
   getHashedPassword(form: NgForm) {
     console.log(form);
     if (form.valid) {
       this.http.post(this.actionUrl, this.passwordModel)
-      .pipe(map((response: any) => response), catchError(this.handleError)).subscribe(result => {
-        console.log(result);
-        this.hashedPasswordModel.hashedPassword = result.hashedPassword;
-      });
+        .pipe(map((response: any) => response), catchError(this.handleError)).subscribe(result => {
+          console.log(result);
+          this.hashedPasswordModel.hashedPassword = result.hashedPassword;
+        });
     }
   }
   copied(event) {
@@ -39,8 +44,8 @@ export class HomeComponent {
     } else {
       console.error(
         `Backend returned code ${error.status}, ` +
-          `body was: ${error.error}` +
-          `,also ${error.message}`
+        `body was: ${error.error}` +
+        `,also ${error.message}`
       );
       console.log((<any>error)._body);
     }
