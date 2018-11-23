@@ -13,24 +13,20 @@ namespace ASP.NET_Hash_Generator.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] InputPasswordViewModel inputPasswordViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return BadRequest();
+            switch (inputPasswordViewModel.HashType)
             {
-                switch (inputPasswordViewModel.HashType)
-                {
-                    case HashType.ASPNETCORE:
-                        {
-                            var passwordHasher = new PasswordHasher<string>();
-                            return Ok(new { hashedPassword = passwordHasher.HashPassword("", inputPasswordViewModel.Password) });
-                        }
-                    case HashType.ASPNETMVC:
-                        {
-                            return Ok(new { hashedPassword = PasswordHasher.HashPassword(inputPasswordViewModel.Password) });
-                        }
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                case HashType.ASPNETCORE:
+                    return Ok(new
+                    {
+                        hashedPassword =
+                            new PasswordHasher<string>().HashPassword(string.Empty, inputPasswordViewModel.Password)
+                    });
+                case HashType.ASPNETMVC:
+                    return Ok(new {hashedPassword = PasswordHasher.HashPassword(inputPasswordViewModel.Password)});
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            return BadRequest();
         }
     }
 }
